@@ -7,26 +7,16 @@ from app.models.user import User
 from app.core.config import get_session
 from app.core.auth import get_current_user
 from typing import List
+from app.services.medical_history import create_medical_history, get_medical_histories
 
 router = APIRouter(prefix="/patients/{patient_id}/histories", tags=["medical_histories"])
 
 @router.post("/", response_model=MedicalHistoryRead)
-def create_medical_history(patient_id: int, history: MedicalHistoryCreate, session: Session = Depends(get_session), current_user: User = Depends(get_current_user)):
-    statement = select(Patient).where(Patient.id == patient_id, Patient.owner_id == current_user.id)
-    patient = session.exec(statement).first()
-    if not patient:
-        raise HTTPException(status_code=404, detail="Paciente no encontrado")
-    db_history = MedicalHistory(patient_id=patient_id, description=history.description)
-    session.add(db_history)
-    session.commit()
-    session.refresh(db_history)
-    return db_history
+def create(patient_id: str, history: MedicalHistoryCreate):
+    result = create_medical_history(patient_id,history)
+    return result
 
 @router.get("/", response_model=List[MedicalHistoryRead])
-def get_medical_histories(patient_id: int, session: Session = Depends(get_session), current_user: User = Depends(get_current_user)):
-    statement = select(Patient).where(Patient.id == patient_id, Patient.owner_id == current_user.id)
-    patient = session.exec(statement).first()
-    if not patient:
-        raise HTTPException(status_code=404, detail="Paciente no encontrado")
-    statement = select(MedicalHistory).where(MedicalHistory.patient_id == patient_id)
-    return session.exec(statement).all() 
+def get_medical_histories(patient_id: str):
+   result =  get_medical_histories(patient_id)
+   return result

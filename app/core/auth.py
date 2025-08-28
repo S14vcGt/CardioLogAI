@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 from fastapi import Depends, HTTPException, status
 from sqlmodel import Session, select
 from app.models.user import User
-from app.core.config import engine, get_session
+from app.core.config import get_session
 import os
 
 SECRET_KEY = os.getenv("SECRET_KEY", "supersecretkey")
