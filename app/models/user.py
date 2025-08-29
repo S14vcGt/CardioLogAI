@@ -6,6 +6,7 @@ if TYPE_CHECKING:
 
 class User(SQLModel, table=True):
     id: Optional[str] = Field(default=None, primary_key=True)
+    is_admin: bool = Field(default=False)
     username: str = Field(index=True, unique=True)
     hashed_password: str
     full_name: Optional[str]

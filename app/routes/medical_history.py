@@ -12,11 +12,11 @@ from app.services.medical_history import create_medical_history, get_medical_his
 router = APIRouter(prefix="/patients/{patient_id}/histories", tags=["medical_histories"])
 
 @router.post("/", response_model=MedicalHistoryRead)
-def create(patient_id: str, history: MedicalHistoryCreate):
+def create_mh(patient_id: str, history: MedicalHistoryCreate):
     result = create_medical_history(patient_id,history)
     return result
 
 @router.get("/", response_model=List[MedicalHistoryRead])
-def get_medical_histories(patient_id: str):
+def get_mh(patient_id: str):
    result =  get_medical_histories(patient_id)
    return result
