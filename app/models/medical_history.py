@@ -20,7 +20,7 @@ class MedicalHistory(SQLModel, table=True):
     height:float
     weight: float
     body_surface_area:float
-    date: datetime = Field(default_factory=datetime.utcnow)
+    date: datetime = Field(default_factory=datetime.now())
     description: str
     patient_id: str = Field(foreign_key="patient.id")
     patient: Optional["Patient"] = Relationship(back_populates="medical_histories") 
