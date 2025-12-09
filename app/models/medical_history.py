@@ -8,8 +8,6 @@ if TYPE_CHECKING:
 class MedicalHistory(SQLModel, table=True):
     id: Optional[str] = Field(default=None, primary_key=True)
     age: int 
-    sex: str
-    family_history: bool
     smoking_status: str
     sedentary_lifestyle: bool
     blood_pressure: int

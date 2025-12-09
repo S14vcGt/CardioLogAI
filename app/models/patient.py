@@ -14,6 +14,8 @@ class Patient(SQLModel, table=True):
     cedula: int
     phone: str
     email:str
+    sex: str
+    family_history: bool
     doctor_id: str = Field(foreign_key="user.id")
     doctor: Optional["User"] = Relationship(back_populates="patients")
     medical_histories: List["MedicalHistory"] = Relationship(back_populates="patient") 
