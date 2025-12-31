@@ -13,7 +13,7 @@ class MedicalHistoryCreate(BaseModel):
     height:float
     weight: float
     body_surface_area:float
-    date: datetime
+    date: str
     description: str
     patient_id: str
 
@@ -30,7 +30,7 @@ class MedicalHistoryRead(BaseModel):
     height:float
     weight: float
     body_surface_area:float
-    date: datetime = Field(default_factory=datetime.now())
+    date: str
     description: str
     class Config:
         from_attributes = True 

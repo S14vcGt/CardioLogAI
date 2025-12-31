@@ -2,8 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, status, exceptions
 from typing import List
 from app.schemas.user import UserCreate, UserRead
 from app.models.user import User
-from app.core.auth import get_password_hash, get_current_user, get_user_by_username
-from app.services.dependencies import get_user_service
+from app.services.dependencies import get_user_service, get_current_user
 from app.services.user import UserService
 
 router = APIRouter(prefix="/users", tags=["users"])
@@ -14,9 +13,11 @@ def create_user(
     user: UserCreate, user_service: UserService = Depends(get_user_service)
 ):
     try:
-        # db_user = get_user_by_username(session, user.username)
-        # if db_user:
-        # raise HTTPException(status_code=400, detail="El usuario ya existe")
+        # Use user_service to check if user exists (or handle unique constraint error)
+        # Assuming user_service.create handles it or we check first
+        db_user = user_service.get_by_username(user.username)
+        if db_user:
+            raise HTTPException(status_code=400, detail="El usuario ya existe")
 
         new_user = user_service.create(user)
         return new_user

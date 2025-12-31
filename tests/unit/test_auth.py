@@ -1,4 +1,4 @@
-from app.core.auth import get_password_hash, verify_password
+from app.services.auth import get_password_hash, verify_password
 
 def test_password_hash_and_verify():
     password = "test1234"

@@ -2,7 +2,7 @@ from sqlmodel import select
 from typing import List
 from app.schemas.user import UserCreate
 from app.models.user import User
-from app.core.auth import get_password_hash
+from app.core.security import get_password_hash
 import uuid
 
 
@@ -35,3 +35,7 @@ class UserService:
     def read_all(self) -> List[User]:
         result = self.session.exec(select(User)).all()
         return result
+
+    def get_by_username(self, username: str) -> User:
+        statement = select(User).where(User.username == username)
+        return self.session.exec(statement).first()
