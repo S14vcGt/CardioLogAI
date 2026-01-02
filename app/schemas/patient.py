@@ -11,4 +11,4 @@ class PatientRead(BaseModel):
     name: str
     birth_date: date
     class Config:
-        orm_mode = True 
+        from_attributes = True  

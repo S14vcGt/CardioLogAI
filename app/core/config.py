@@ -1,4 +1,5 @@
 from sqlmodel import SQLModel, create_engine, Session
+from typing import Annotated
 import os
 
 from dotenv import load_dotenv
@@ -17,4 +18,6 @@ def init_db():
 
 def get_session():
     with Session(engine) as session:
-        yield session 
+        yield session
+
+SessionDep = Annotated[Session, Depends(get_session)]

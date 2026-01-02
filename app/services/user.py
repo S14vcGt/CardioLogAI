@@ -4,38 +4,33 @@ from app.schemas.user import UserCreate
 from app.models.user import User
 from app.core.security import get_password_hash
 import uuid
+from app.core.config import SessionDep
 
+def create(session:SessionDep, user: UserCreate, is_admin=False):
 
-class UserService:
+    hashed_password = get_password_hash(user.password)
+    db_user = User(
+        id=str(uuid.uuid4()),
+        is_admin=is_admin,
+        username=user.username,
+        hashed_password=hashed_password,
+        full_name=user.full_name,
+        email=user.email,
+    )
+    session.add(db_user)
+    session.commit()
+    session.refresh(db_user)
 
-    def __init__(self, db_session):
-        self.session = db_session
+    return db_user
 
-    def create(self, user: UserCreate, is_admin=False):
+def read_by_id(session: SessionDep, id: str) -> User:
+    statement = select(User).where(User.id == id)
+    return session.exec(statement).first()
 
-        hashed_password = get_password_hash(user.password)
-        db_user = User(
-            id=str(uuid.uuid4()),
-            is_admin=is_admin,
-            username=user.username,
-            hashed_password=hashed_password,
-            full_name=user.full_name,
-            email=user.email,
-        )
-        self.session.add(db_user)
-        self.session.commit()
-        self.session.refresh(db_user)
+def read_all(session: SessionDep) -> List[User]:
+    result = session.exec(select(User)).all()
+    return result
 
-        return db_user
-
-    def read_by_id(self, id: str) -> User:
-        statement = select(User).where(User.id == id)
-        return self.session.exec(statement).first()
-
-    def read_all(self) -> List[User]:
-        result = self.session.exec(select(User)).all()
-        return result
-
-    def get_by_username(self, username: str) -> User:
-        statement = select(User).where(User.username == username)
-        return self.session.exec(statement).first()
+def get_by_username(session: SessionDep, username: str) -> User:
+    statement = select(User).where(User.username == username)
+    return session.exec(statement).first()
