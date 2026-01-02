@@ -3,23 +3,24 @@ from typing import List
 from app.schemas.user import UserCreate, UserRead
 from app.models.user import User
 from app.services.auth import get_current_user
-from app.services.user import UserService
+from app.services import user as user_service
+from app.core.config import SessionDep
 
 router = APIRouter(prefix="/users", tags=["users"])
 
 
 @router.post("/", response_model=UserRead)
 def create_user(
-    user: UserCreate, user_service: UserService = Depends(UserService)
+    user: UserCreate, session:SessionDep
 ):
     try:
         # Use user_service to check if user exists (or handle unique constraint error)
         # Assuming user_service.create handles it or we check first
-        db_user = user_service.get_by_username(user.username)
+        db_user = user_service.get_by_username(session,user.username)
         if db_user:
             raise HTTPException(status_code=400, detail="El usuario ya existe")
 
-        new_user = user_service.create(user)
+        new_user = user_service.create(session,user)
         return new_user
     except exceptions.ResponseValidationError as e:
         return e
@@ -27,10 +28,10 @@ def create_user(
 
 @router.post("/admin", response_model=UserRead)
 def create_admin(
-    user: UserCreate, user_service: UserService = Depends(UserService)
+    user: UserCreate, session:SessionDep
 ):
     try:
-        new_user = user_service.create(user, is_admin=True)
+        new_user = user_service.create(session, user, is_admin=True)
         return new_user
 
     except exceptions.ResponseValidationError as e:
@@ -43,10 +44,10 @@ def read_users_me(current_user: User = Depends(get_current_user)):
 
 
 @router.get("/{id}", response_model=UserRead)
-def read_user_by_id(id: str, user_service: UserService = Depends(UserService)):
-    return user_service.read_by_id(id)
+def read_user_by_id(id: str, session:SessionDep):
+    return user_service.read_by_id(session,id)
 
 
 @router.get("/", response_model=List[UserRead])
-def read_all_users(user_service: UserService = Depends(UserService)):
-    return user_service.read_all()
+def read_all_users(session:SessionDep):
+    return user_service.read_all(session)

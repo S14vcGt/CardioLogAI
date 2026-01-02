@@ -5,7 +5,6 @@ from typing import List
 from app.core.config import SessionDep
 
 
-
 def create(session:SessionDep, patient: PatientCreate, doctor_id: str) -> Patient:
     # Fixed: using doctor_id instead of owner_id as per model definition
     db_patient = Patient(**patient.dict(), doctor_id=doctor_id)
