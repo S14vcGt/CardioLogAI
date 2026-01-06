@@ -11,16 +11,16 @@ router = APIRouter(prefix="/users", tags=["users"])
 
 @router.post("/", response_model=UserRead)
 def create_user(
-    user: UserCreate, session:SessionDep
+    user: UserCreate, session: SessionDep
 ):
     try:
         # Use user_service to check if user exists (or handle unique constraint error)
         # Assuming user_service.create handles it or we check first
-        db_user = user_service.get_by_username(session,user.username)
+        db_user = user_service.get_by_username(session, user.username)
         if db_user:
             raise HTTPException(status_code=400, detail="El usuario ya existe")
 
-        new_user = user_service.create(session,user)
+        new_user = user_service.create(session, user)
         return new_user
     except exceptions.ResponseValidationError as e:
         return e

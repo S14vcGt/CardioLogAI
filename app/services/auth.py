@@ -12,19 +12,15 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/token")
 
 
 
-def create_access_token(data: dict, expires_delta: timedelta = None):
+def create_access_token(data: dict):
     to_encode = data.copy()
-    if expires_delta:
-        expire = datetime.utcnow() + expires_delta
-    else:
-        expire = datetime.utcnow() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    expire = datetime.utcnow() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     to_encode.update({"exp": expire})
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
     return encoded_jwt
 
-def authenticate_user(session:SessionDep, username: str, password: str):
-    # We use self.user_service, session not needed
-    user = get_by_username(session,username)
+def authenticate_user(session: SessionDep, username: str, password: str):
+    user = get_by_username(session, username)
     
     if not user:
         return None
@@ -32,7 +28,7 @@ def authenticate_user(session:SessionDep, username: str, password: str):
         return None
     return user
 
-def get_user_from_token(session:SessionDep, token: str):
+def get_user_from_token(session: SessionDep, token: str):
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="No se pudo validar las credenciales",
@@ -46,11 +42,11 @@ def get_user_from_token(session:SessionDep, token: str):
     except JWTError:
         raise credentials_exception
     
-    user = user = get_by_username(session,username)
+    user = get_by_username(session, username)
 
     if user is None:
         raise credentials_exception
     return user 
 
-def get_current_user(token: str = Depends(oauth2_scheme), session:SessionDep ) -> User:
-    return get_user_from_token(session,token)
+def get_current_user(session: SessionDep, token: str = Depends(oauth2_scheme)) -> User:
+    return get_user_from_token(session, token)

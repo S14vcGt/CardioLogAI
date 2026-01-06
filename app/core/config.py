@@ -1,3 +1,4 @@
+from fastapi import Depends
 from sqlmodel import SQLModel, create_engine, Session
 from typing import Annotated
 import os
@@ -6,10 +7,10 @@ from dotenv import load_dotenv
 
 load_dotenv(dotenv_path=".env") # defaults to .env if path not specified or just load_dotenv() from python-dotenv
 
-DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://postgres:mysecretpassword@127.0.0.1:5432/tesis_db")
-SECRET_KEY = os.getenv("SECRET_KEY", "supersecretkey")
-ALGORITHM = os.getenv("ALGORITHM", "HS256")
-ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", 30))
+DATABASE_URL = os.getenv("DATABASE_URL")
+SECRET_KEY = os.getenv("SECRET_KEY")
+ALGORITHM = os.getenv("ALGORITHM")
+ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES"))
 
 engine = create_engine(DATABASE_URL, echo=True)
 
