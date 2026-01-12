@@ -13,3 +13,6 @@ def test_register_and_login_user(client, user_data):
     assert response.status_code == 200
     data = response.json()
     assert "access_token" in data 
+
+def create_user():
+    

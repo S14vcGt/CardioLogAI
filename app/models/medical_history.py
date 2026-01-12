@@ -14,7 +14,7 @@ class MedicalHistory(SQLModel, table=True):
     ldl_cholesterol: int
     fasting_blood_sugar: int
     body_mass_index: float
-    recg: str
+    recg: str #resting electrocardiogram
     height:float
     weight: float
     body_surface_area:float
