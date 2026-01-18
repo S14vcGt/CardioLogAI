@@ -2,9 +2,8 @@ from fastapi.security import OAuth2PasswordBearer
 from jose import jwt, JWTError
 from datetime import datetime, timedelta
 from fastapi import Depends, HTTPException, status
-from sqlmodel import Session
 from app.models.user import User
-from app.core.config import SECRET_KEY, ALGORITHM, ACCESS_TOKEN_EXPIRE_MINUTES, get_session
+from app.core.config import SECRET_KEY, ALGORITHM, ACCESS_TOKEN_EXPIRE_MINUTES
 from app.core.security import verify_password
 from app.core.config import SessionDep 
 from app.services.user import get_by_username

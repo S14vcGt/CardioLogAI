@@ -2,6 +2,15 @@ import pytest
 from app.models.patient import Patient
 from app.models.user import User
 
+from fastapi.testclient import TestClient
+from app.main import app
+
+client = TestClient(app)
+
+@pytest.fixture
+def user_data():
+    return {"username": "testuser", "password": "testpass", "full_name": "Test User", "email": "test@example.com"}
+
 @pytest.fixture
 def patient_data():
     return {"name": "Test Patient", "birth_date": "1990-01-01"}

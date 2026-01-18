@@ -14,5 +14,5 @@ def test_register_and_login_user(client, user_data):
     data = response.json()
     assert "access_token" in data 
 
-def create_user():
+def test_create_user():
     
