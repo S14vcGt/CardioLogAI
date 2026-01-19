@@ -17,6 +17,7 @@ def create_user(
         # Use user_service to check if user exists (or handle unique constraint error)
         # Assuming user_service.create handles it or we check first
         db_user = user_service.get_by_username(session, user.username)
+        print(f"{db_user} deb user")
         if db_user:
             raise HTTPException(status_code=400, detail="El usuario ya existe")
 

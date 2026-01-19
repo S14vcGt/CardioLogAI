@@ -24,6 +24,7 @@ dev = [
 
 [dependency-groups]
 dev = [
+    "faker>=40.1.2",
     "pytest>=8.4.1",
 ]
 

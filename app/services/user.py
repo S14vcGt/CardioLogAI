@@ -7,7 +7,7 @@ import uuid
 from app.core.config import SessionDep
 
 def create(session:SessionDep, user: UserCreate, is_admin=False):
-
+    
     hashed_password = get_password_hash(user.password)
     db_user = User(
         id=str(uuid.uuid4()),
@@ -22,7 +22,7 @@ def create(session:SessionDep, user: UserCreate, is_admin=False):
     session.refresh(db_user)
 
     return db_user
-
+    
 def read_by_id(session: SessionDep, id: str) -> User:
     statement = select(User).where(User.id == id)
     return session.exec(statement).first()
