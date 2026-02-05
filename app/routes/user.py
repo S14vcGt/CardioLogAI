@@ -1,26 +1,20 @@
 from fastapi import APIRouter, Depends, HTTPException, status, exceptions
-from typing import List
+from typing import Sequence
 from app.schemas.user import UserCreate, UserRead
 from app.models.user import User
 from app.services.auth import get_current_user
 from app.services import user as user_service
 from app.core.config import SessionDep
+from typing import Annotated
 
-router = APIRouter(prefix="/users", tags=["users"])
+router = APIRouter(
+    prefix="/users", tags=["users"]
+)  # , dependencies=[Depends(get_current_user)]
 
 
 @router.post("/", response_model=UserRead)
-def create_user(
-    user: UserCreate, session: SessionDep
-):
+def create_user(user: UserCreate, session: SessionDep):
     try:
-        # Use user_service to check if user exists (or handle unique constraint error)
-        # Assuming user_service.create handles it or we check first
-        db_user = user_service.get_by_username(session, user.username)
-        print(f"{db_user} deb user")
-        if db_user:
-            raise HTTPException(status_code=400, detail="El usuario ya existe")
-
         new_user = user_service.create(session, user)
         return new_user
     except exceptions.ResponseValidationError as e:
@@ -28,14 +22,12 @@ def create_user(
 
 
 @router.post("/admin", response_model=UserRead)
-def create_admin(
-    user: UserCreate, session:SessionDep
-):
+def create_admin(user: UserCreate, session: SessionDep):
     try:
         new_user = user_service.create(session, user, is_admin=True)
         return new_user
 
-    except exceptions.ResponseValidationError as e:
+    except Exception as e:
         return e
 
 
@@ -45,10 +37,15 @@ def read_users_me(current_user: User = Depends(get_current_user)):
 
 
 @router.get("/{id}", response_model=UserRead)
-def read_user_by_id(id: str, session:SessionDep):
-    return user_service.read_by_id(session,id)
+def read_user_by_id(user=Depends(user_service.read_by_id)) -> User:
+    return user
 
 
-@router.get("/", response_model=List[UserRead])
-def read_all_users(session:SessionDep):
-    return user_service.read_all(session)
+@router.get("/", response_model=Sequence[UserRead])
+def read_all_users(all_users=Depends(user_service.read_all)) -> Sequence[User]:
+    return all_users
+
+
+@router.get("/admin", response_model=Sequence[UserRead])
+def read_all_admins(all_admins=Depends(user_service.read_all_admins)) -> Sequence[User]:
+    return all_admins

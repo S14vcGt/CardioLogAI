@@ -6,10 +6,8 @@ from app.routes.auth import router as auth_router
 from app.routes.patient import router as patient_router
 from app.routes.medical_history import router as medical_history_router
 from app.models import *
-from app.core.config import engine
-from sqlmodel import SQLModel
 from contextlib import asynccontextmanager
-from app.core.config import init_db, get_session
+from app.core.config import init_db
 from dotenv import load_dotenv
 
 load_dotenv(dotenv_path="../.env")
