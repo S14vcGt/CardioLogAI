@@ -49,9 +49,15 @@ def read_user_by_id(user=Depends(user_service.read_by_id)) -> User:
 
 @router.get("/", response_model=Sequence[UserRead])
 def read_all_users(all_users=Depends(user_service.read_all)) -> Sequence[User]:
-    return all_users
+    try:
+        return all_users
+    except Exception as e:
+        return e
 
 
 @router.get("/admin", response_model=Sequence[UserRead])
 def read_all_admins(all_admins=Depends(user_service.read_all_admins)) -> Sequence[User]:
-    return all_admins
+    try:
+        return all_admins
+    except Exception as e:
+        return e
