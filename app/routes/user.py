@@ -33,12 +33,18 @@ def create_admin(user: UserCreate, session: SessionDep):
 
 @router.get("/me", response_model=UserRead)
 def read_users_me(current_user: User = Depends(get_current_user)):
-    return current_user
+    try:
+        return current_user
+    except Exception as e:
+        return e
 
 
 @router.get("/{id}", response_model=UserRead)
 def read_user_by_id(user=Depends(user_service.read_by_id)) -> User:
-    return user
+    try:
+        return user
+    except Exception as e:
+        return e
 
 
 @router.get("/", response_model=Sequence[UserRead])
