@@ -20,3 +20,8 @@ def get_all_by_doctor(session:SessionDep, doctor_id: str) -> List[Patient]:
 def get_by_id(session:SessionDep, patient_id: str) -> Patient | None:
     statement = select(Patient).where(Patient.id == patient_id)
     return session.exec(statement).first()
+
+'''def edit_patient(session:SessionDep, patient: Patient) -> Patient:
+'''
+
+
