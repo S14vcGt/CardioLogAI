@@ -12,6 +12,9 @@ class PatientCreate(BaseModel):
     email:str
     sex: str
     family_history: bool
+    doctor_id: Optional[str]
+
+    model_config = ConfigDict(from_attributes=True) 
 
 class PatientRead(BaseModel):
     id: int
@@ -22,5 +25,6 @@ class PatientRead(BaseModel):
     cedula: int
     phone: str
     email:str
+    family_history: bool
     
     model_config = ConfigDict(from_attributes=True) 
