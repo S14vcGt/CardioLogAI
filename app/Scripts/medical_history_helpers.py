@@ -1,5 +1,5 @@
 from datetime import date, datetime
-from general_helpers import get_vzla_datetime
+from app.Scripts.general_helpers import get_vzla_datetime
 import math
 
 

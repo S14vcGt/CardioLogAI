@@ -5,7 +5,7 @@ import os
 
 from dotenv import load_dotenv
 
-load_dotenv(dotenv_path=".env") # defaults to .env if path not specified or just load_dotenv() from python-dotenv
+load_dotenv(dotenv_path="../../.env") # defaults to .env if path not specified or just load_dotenv() from python-dotenv
 
 DATABASE_URL = os.getenv("SUPABASE_URL")
 SECRET_KEY = os.getenv("SECRET_KEY")
