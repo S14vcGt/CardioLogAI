@@ -1,0 +1,1 @@
+> If you have problems with the versions, just delete the uv.lock file and sync, then lock or the other way around
