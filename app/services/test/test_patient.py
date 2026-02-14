@@ -1,4 +1,5 @@
 import pytest
+from pydantic import ValidationError
 from unittest.mock import MagicMock
 from fastapi import HTTPException
 from sqlalchemy.exc import IntegrityError
@@ -62,7 +63,7 @@ def test_create_patient_integrity_error(mock_session):
 
     assert exc_info.value.status_code == 400
     assert "Cedula ya registrada" in exc_info.value.detail
-    mock_session.rollback.assert_called_once()  # Verificar que se hizo rollback
+    mock_session.rollback.assert_called_once()
 
 
 def test_create_patient_unexpected_error(mock_session):

@@ -13,7 +13,6 @@ def create(session: SessionDep, user: UserCreate, is_admin=False):
 
     hashed_password = get_password_hash(user.password)
     db_user = User(
-        id=str(uuid.uuid4()),
         is_admin=is_admin,
         username=user.username,
         hashed_password=hashed_password,

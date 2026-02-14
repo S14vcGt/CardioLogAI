@@ -16,6 +16,7 @@ def create_patient(
     session: SessionDep,
     current_user: User = Depends(get_current_user)
 ):
+    patient.doctor_id = current_user.id
     db_patient = create(session, patient)
     return db_patient
 
