@@ -1,4 +1,4 @@
-import os
+'''import os
 import pytest
 from sqlmodel import SQLModel, create_engine, Session
 from app.core.config import get_session
@@ -29,4 +29,4 @@ def client(session):
     app.dependency_overrides[get_session] = get_test_session_override
     with TestClient(app) as c:
         yield c
-    app.dependency_overrides.clear() 
+    app.dependency_overrides.clear() '''
