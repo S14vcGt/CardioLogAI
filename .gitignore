@@ -4,3 +4,7 @@ __pycache__/
 CardioLogAI.egg-info/
 build/
 pytest_cache/
+# es necesario ignorar el uv.lock porque en local tengo
+# una version diferente de uv a la que hay disponible en 
+# Firebase studio
+uv.lock
