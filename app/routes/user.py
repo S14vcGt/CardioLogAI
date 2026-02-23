@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, status, exceptions
 from typing import Sequence
-from app.schemas.user import UserCreate, UserRead
+from app.schemas.user import UserCreate, UserRead, UserUpdate
 from app.models.user import User
 from app.services.auth import get_current_user
 from app.services import user as user_service
