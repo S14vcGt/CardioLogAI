@@ -28,7 +28,7 @@ def create(session: SessionDep, user: UserCreate, is_admin=False):
         raise HTTPException(status_code=400, detail="Usuario o Email ya registrado")
     except Exception as e:
         session.rollback()
-        raise HTTPException(status_code=500, detail=f"Error inesperado: {str(e)}")
+        raise e
 
     return db_user
 
@@ -45,7 +45,8 @@ def read_by_id(session: SessionDep, id: str) -> User:
     except HTTPException as e:
         raise e
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error inesperado: {str(e)}")
+        raise e
+
 
 
 def read_all(session: SessionDep) -> Sequence[User]:
@@ -53,7 +54,8 @@ def read_all(session: SessionDep) -> Sequence[User]:
         result = session.exec(select(User).where(User.is_admin == False)).all()
         return result
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error inesperado: {str(e)}")
+        raise e
+
 
 
 def read_all_admins(session: SessionDep) -> Sequence[User]:
@@ -61,7 +63,8 @@ def read_all_admins(session: SessionDep) -> Sequence[User]:
         result = session.exec(select(User).where(User.is_admin == True)).all()
         return result
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error inesperado: {str(e)}")
+        raise e
+
 
 
 def get_by_username(session: SessionDep, username: str) -> User:
