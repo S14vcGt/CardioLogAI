@@ -9,3 +9,5 @@ pytest_cache/
 # Firebase studio
 uv.lock
 logs/
+.coverage
+test.db

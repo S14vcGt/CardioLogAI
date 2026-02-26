@@ -24,11 +24,13 @@ dev = [
 
 [dependency-groups]
 dev = [
+    "coverage>=7.13.4",
     "faker>=40.1.2",
     "pytest>=8.4.1",
+    "pytest-cov>=7.0.0",
 ]
 
 [tool.pytest.ini_options]
 pythonpath = "."
-testpaths = ["tests", "app"]
+testpaths = ["tests"]
 
