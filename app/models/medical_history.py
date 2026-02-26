@@ -28,7 +28,7 @@ class MedicalHistory(SQLModel, table=True):
     body_surface_area: float = Field(description="Area de superficie corporal")
     heart_disease: bool = Field(description="Diagnostico de enfermedades cardiacas")
     diabetes: bool = Field(description="Diagnostico de diabetes")
-    created_at: datetime = Field(default_factory=get_vzla_datetime())
+    created_at: datetime = Field(default_factory=get_vzla_datetime)
     description: str = Field(description="Descripción del historial médico")
     patient_id: str = Field(
         foreign_key="patient.id",

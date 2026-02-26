@@ -4,12 +4,15 @@ from app.models.medical_history import MedicalHistory
 from app.models.patient import Patient
 from app.models.user import User
 from app.core.config import SessionDep
+from app.core.logger import get_logger
 from app.services.auth import get_current_user
 from typing import List
 from app.services.medical_history import (
     create_medical_history,
     get_medical_histories_by_patient,
 )
+
+logger = get_logger(__name__)
 
 router = APIRouter(
     prefix="/patients/{patient_id}/histories", tags=["medical_histories"]
@@ -26,7 +29,10 @@ def create_mh(
     try:
         result = create_medical_history(session, patient_id, history, current_user)
         return result
+    except HTTPException as e:
+        raise e
     except Exception as e:
+        logger.exception(f"Error en POST /patients/{patient_id}/histories/: {e}")
         raise e
 
 
@@ -37,5 +43,8 @@ def get_mh(
     try:
         result = get_medical_histories_by_patient(session, patient_id, current_user)
         return result
+    except HTTPException as e:
+        raise e
     except Exception as e:
+        logger.exception(f"Error en GET /patients/{patient_id}/histories/: {e}")
         raise e

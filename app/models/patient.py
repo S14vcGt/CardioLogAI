@@ -18,6 +18,6 @@ class Patient(SQLModel, table=True):
     email: Optional[str] = Field(unique=True)
     sex: str
     family_history: bool
-    doctor_id: str = Field(foreign_key="user.id")
+    doctor_id: str = Field(foreign_key="users.id")
     doctor: Optional["User"] = Relationship(back_populates="patients")
     medical_histories: List["MedicalHistory"] = Relationship(back_populates="patient")

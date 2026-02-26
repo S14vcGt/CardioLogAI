@@ -5,10 +5,13 @@ from fastapi import Depends, HTTPException, status
 from app.models.user import User
 from app.core.config import SECRET_KEY, ALGORITHM, ACCESS_TOKEN_EXPIRE_MINUTES
 from app.core.security import verify_password
-from app.core.config import SessionDep 
+from app.core.config import SessionDep
+from app.core.logger import get_logger
 from app.services.user import get_by_username
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/token")
 
+logger = get_logger(__name__)
+
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/token")
 
 
 def create_access_token(data: dict):
@@ -18,14 +21,16 @@ def create_access_token(data: dict):
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
     return encoded_jwt
 
+
 def authenticate_user(session: SessionDep, username: str, password: str):
     user = get_by_username(session, username)
-    
+
     if not user:
         return None
     if not verify_password(password, user.hashed_password):
         return None
     return user
+
 
 def get_user_from_token(session: SessionDep, token: str):
     credentials_exception = HTTPException(
@@ -39,13 +44,15 @@ def get_user_from_token(session: SessionDep, token: str):
         if username is None:
             raise credentials_exception
     except JWTError:
+        logger.warning(f"Token JWT invalido o expirado")
         raise credentials_exception
-    
+
     user = get_by_username(session, username)
 
     if user is None:
         raise credentials_exception
-    return user 
+    return user
+
 
 def get_current_user(session: SessionDep, token: str = Depends(oauth2_scheme)) -> User:
     return get_user_from_token(session, token)

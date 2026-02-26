@@ -1,5 +1,7 @@
 from typing import Optional
 from pydantic import BaseModel, ConfigDict
+from datetime import datetime
+
 
 class MedicalHistoryCreate(BaseModel):
     smoking_status: str
@@ -14,12 +16,13 @@ class MedicalHistoryCreate(BaseModel):
     body_surface_area: Optional[float]
     description: Optional[str]
     diabetes: Optional[bool]
+    heart_disease: Optional[bool]
 
-    model_config = ConfigDict(from_attributes=True) 
+    model_config = ConfigDict(from_attributes=True)
 
 
 class MedicalHistoryRead(BaseModel):
-    id: int
+    id: str
     age: int
     smoking_status: str
     sedentary_lifestyle: bool
@@ -31,7 +34,9 @@ class MedicalHistoryRead(BaseModel):
     height: float
     weight: float
     body_surface_area: float
-    date: str
+    created_at: datetime
     description: str
+    diabetes: bool
+    heart_disease: bool
 
     model_config = ConfigDict(from_attributes=True)

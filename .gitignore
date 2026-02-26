@@ -8,3 +8,4 @@ pytest_cache/
 # una version diferente de uv a la que hay disponible en 
 # Firebase studio
 uv.lock
+logs/

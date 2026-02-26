@@ -7,6 +7,7 @@ if TYPE_CHECKING:
 
 
 class User(SQLModel, table=True):
+    __tablename__ = "users"
     id: Optional[str] = Field(default_factory=lambda: str(uuid4()), primary_key=True)
     is_admin: bool = Field(default=False)
     username: str = Field(index=True, unique=True)

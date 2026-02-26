@@ -1,6 +1,8 @@
 import os
-from fastapi import FastAPI
-from logging import INFO, basicConfig, getLogger
+from fastapi import FastAPI, HTTPException, Request
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
+from app.core.logger import get_logger, setup_db_logger
 from app.routes.user import router as user_router
 from app.routes.auth import router as auth_router
 from app.routes.patient import router as patient_router
@@ -12,14 +14,18 @@ from dotenv import load_dotenv
 
 load_dotenv(dotenv_path="../.env")
 
+logger = get_logger(__name__)
 
-logger = getLogger(__name__)
-basicConfig(level=INFO)
+ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+    "http://localhost:3001",
+]
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     logger.info("Starting up...")
+    setup_db_logger()
     init_db()
     yield
     logger.info("Shutting down...")
@@ -27,6 +33,48 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(lifespan=lifespan)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=ALLOWED_ORIGINS,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+
+@app.exception_handler(HTTPException)
+async def http_exception_handler(request: Request, exc: HTTPException):
+    """Loguea errores HTTP y los propaga con CORS headers."""
+    logger.warning(
+        f"HTTP {exc.status_code} en {request.method} {request.url.path}: {exc.detail}"
+    )
+    origin = request.headers.get("origin")
+    headers = {}
+    if origin in ALLOWED_ORIGINS:
+        headers["Access-Control-Allow-Origin"] = origin
+        headers["Access-Control-Allow-Credentials"] = "true"
+    return JSONResponse(
+        status_code=exc.status_code,
+        content={"detail": exc.detail},
+        headers=headers,
+    )
+
+
+@app.exception_handler(Exception)
+async def global_exception_handler(request: Request, exc: Exception):
+    """Catch-all: loguea excepciones no manejadas con traceback completo."""
+    logger.exception(f"Error no manejado en {request.method} {request.url.path}: {exc}")
+    origin = request.headers.get("origin")
+    headers = {}
+    if origin in ALLOWED_ORIGINS:
+        headers["Access-Control-Allow-Origin"] = origin
+        headers["Access-Control-Allow-Credentials"] = "true"
+    return JSONResponse(
+        status_code=500,
+        content={"detail": "Error interno del servidor"},
+        headers=headers,
+    )
 
 
 app.include_router(user_router)

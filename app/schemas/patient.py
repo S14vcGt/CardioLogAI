@@ -32,7 +32,7 @@ class PatientCreate(BaseModel):
 
 
 class PatientRead(BaseModel):
-    id: int
+    id: str
     name: str
     lastname: str
     birth_date: str

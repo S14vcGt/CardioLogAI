@@ -3,11 +3,15 @@ from app.models.patient import Patient
 from app.schemas.patient import PatientCreate
 from typing import Sequence
 from app.core.config import SessionDep
+from app.core.logger import get_logger
 from sqlalchemy.exc import IntegrityError
 from fastapi import HTTPException
 import uuid
 
-def create(session:SessionDep, patient: PatientCreate) -> Patient:
+logger = get_logger(__name__)
+
+
+def create(session: SessionDep, patient: PatientCreate) -> Patient:
     try:
         db_patient = Patient(**patient.model_dump())
         session.add(db_patient)
@@ -19,17 +23,20 @@ def create(session:SessionDep, patient: PatientCreate) -> Patient:
         raise HTTPException(status_code=400, detail="Cedula ya registrada")
     except Exception as e:
         session.rollback()
-        raise HTTPException(status_code=500, detail=f"Error inesperado: {str(e)}")
+        logger.exception(f"Error al crear paciente: {e}")
+        raise HTTPException(status_code=500, detail="Error interno del servidor")
 
 
-def get_all_by_doctor(session:SessionDep, doctor_id: str) -> Sequence[Patient]:
-    try: 
+def get_all_by_doctor(session: SessionDep, doctor_id: str) -> Sequence[Patient]:
+    try:
         statement = select(Patient).where(Patient.doctor_id == doctor_id)
         return session.exec(statement).all()
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error inesperado: {str(e)}")
+        logger.exception(f"Error al obtener pacientes del doctor '{doctor_id}': {e}")
+        raise HTTPException(status_code=500, detail="Error interno del servidor")
 
-def get_by_id(session:SessionDep, patient_id: str) -> Patient | None:
+
+def get_by_id(session: SessionDep, patient_id: str) -> Patient | None:
     try:
         statement = select(Patient).where(Patient.id == patient_id)
         patient = session.exec(statement).first()
@@ -41,11 +48,5 @@ def get_by_id(session:SessionDep, patient_id: str) -> Patient | None:
     except HTTPException as e:
         raise e
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error inesperado: {str(e)}")
-
-
-
-'''def edit_patient(session:SessionDep, patient: Patient) -> Patient:
-'''
-
-
+        logger.exception(f"Error al buscar paciente '{patient_id}': {e}")
+        raise HTTPException(status_code=500, detail="Error interno del servidor")

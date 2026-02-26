@@ -6,7 +6,10 @@ from app.models.patient import Patient
 from app.models.user import User
 from typing import List
 from app.core.config import SessionDep
+from app.core.logger import get_logger
 from app.Scripts.medical_history_helpers import calcular_edad, calcular_bsa_mosteller
+
+logger = get_logger(__name__)
 
 
 def create_medical_history(
@@ -39,7 +42,10 @@ def create_medical_history(
         raise e
     except Exception as e:
         session.rollback()
-        raise HTTPException(status_code=500, detail=f"Error inesperado: {str(e)}")
+        logger.exception(
+            f"Error al crear historia medica para paciente '{patient_id}': {e}"
+        )
+        raise HTTPException(status_code=500, detail="Error interno del servidor")
 
 
 def get_medical_histories_by_patient(
@@ -47,7 +53,7 @@ def get_medical_histories_by_patient(
 ):
     try:
         statement = select(Patient).where(
-            Patient.id == patient_id, Patient.owner_id == current_user.id
+            Patient.id == patient_id, Patient.doctor_id == current_user.id
         )
         patient: Patient = session.exec(statement).first()
         if not patient:
@@ -61,4 +67,5 @@ def get_medical_histories_by_patient(
     except HTTPException as e:
         raise e
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error inesperado: {str(e)}")
+        logger.exception(f"Error al obtener historias del paciente '{patient_id}': {e}")
+        raise HTTPException(status_code=500, detail="Error interno del servidor")
