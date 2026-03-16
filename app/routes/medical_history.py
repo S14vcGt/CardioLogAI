@@ -15,7 +15,9 @@ from app.services.medical_history import (
 logger = get_logger(__name__)
 
 router = APIRouter(
-    prefix="/patients/{patient_id}/histories", tags=["medical_histories"]
+    prefix="/patients/{patient_id}/histories",
+    tags=["medical_histories"],
+    dependencies=[Depends(get_current_user)],
 )
 
 

@@ -10,7 +10,9 @@ from typing import List
 
 logger = get_logger(__name__)
 
-router = APIRouter(prefix="/patients", tags=["patients"])
+router = APIRouter(
+    prefix="/patients", tags=["patients"], dependencies=[Depends(get_current_user)]
+)
 
 
 @router.post("/", response_model=PatientRead)

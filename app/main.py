@@ -19,6 +19,7 @@ logger = get_logger(__name__)
 ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "http://localhost:3001",
+    "https://cardiologai.vercel.app",
 ]
 
 

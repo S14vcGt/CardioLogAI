@@ -28,7 +28,9 @@ def create_user(user: UserCreate, session: SessionDep):
 
 
 @router.post("/admin", response_model=UserRead)
-def create_admin(user: UserCreate, session: SessionDep):
+def create_admin(
+    user: UserCreate, session: SessionDep, admin=Depends(get_current_user)
+):
     try:
         new_user = user_service.create(session, user, is_admin=True)
         return new_user
@@ -49,7 +51,9 @@ def read_users_me(current_user: User = Depends(get_current_user)):
 
 
 @router.get("/search/{id}", response_model=UserRead)
-def read_user_by_id(user=Depends(user_service.read_by_id)) -> User:
+def read_user_by_id(
+    user=Depends(user_service.read_by_id), admin=Depends(get_current_user)
+) -> User:
     try:
         return user
     except Exception as e:
@@ -58,7 +62,9 @@ def read_user_by_id(user=Depends(user_service.read_by_id)) -> User:
 
 
 @router.get("/", response_model=Sequence[UserRead])
-def read_all_users(all_users=Depends(user_service.read_all)) -> Sequence[User]:
+def read_all_users(
+    all_users=Depends(user_service.read_all), admin=Depends(get_current_user)
+) -> Sequence[User]:
     try:
         return all_users
     except Exception as e:
@@ -67,7 +73,9 @@ def read_all_users(all_users=Depends(user_service.read_all)) -> Sequence[User]:
 
 
 @router.get("/admin", response_model=Sequence[UserRead])
-def read_all_admins(all_admins=Depends(user_service.read_all_admins)) -> Sequence[User]:
+def read_all_admins(
+    all_admins=Depends(user_service.read_all_admins), admin=Depends(get_current_user)
+) -> Sequence[User]:
     try:
         return all_admins
     except HTTPException as e:
