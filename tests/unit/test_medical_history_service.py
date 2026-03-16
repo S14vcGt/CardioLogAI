@@ -50,14 +50,14 @@ def valid_history_data():
         sedentary_lifestyle=False,
         blood_pressure=120,
         ldl_cholesterol=100,
+        max_hr=150.0,
         fasting_blood_sugar=90,
         body_mass_index=22.0,
-        recg="normal",
+        rest_ecg="normal",
         height=175,
         weight=70,
         body_surface_area=1.85,
         description="Routine check",
-        diabetes=False,
         heart_disease=False,
     )
 
@@ -214,20 +214,19 @@ class TestMedicalHistoryCreateSchema:
             "sedentary_lifestyle": False,
             "blood_pressure": 120,
             "ldl_cholesterol": 100,
+            "max_hr": 150.0,
             "fasting_blood_sugar": 90,
             "body_mass_index": 22.5,
-            "recg": "normal",
+            "rest_ecg": "normal",
             "height": 175,
             "weight": 70,
             "body_surface_area": 1.85,
             "description": "Routine checkup",
-            "diabetes": False,
             "heart_disease": False,
         }
         schema = MedicalHistoryCreate(**data)
         assert schema.smoking_status == "no smoker"
         assert schema.blood_pressure == 120
-        assert schema.diabetes is False
         assert schema.heart_disease is False
 
     def test_optional_fields_accept_none(self):
@@ -237,14 +236,14 @@ class TestMedicalHistoryCreateSchema:
             "sedentary_lifestyle": True,
             "blood_pressure": 140,
             "ldl_cholesterol": 160,
-            "recg": "abnormal",
+            "max_hr": 170.0,
+            "rest_ecg": "abnormal",
             "height": 180,
             "weight": 90,
             "fasting_blood_sugar": None,
             "body_mass_index": None,
             "body_surface_area": None,
             "description": None,
-            "diabetes": None,
             "heart_disease": None,
         }
         schema = MedicalHistoryCreate(**data)
@@ -252,14 +251,13 @@ class TestMedicalHistoryCreateSchema:
         assert schema.body_mass_index is None
         assert schema.body_surface_area is None
         assert schema.description is None
-        assert schema.diabetes is None
         assert schema.heart_disease is None
 
     def test_missing_required_fields(self):
         """Falta de campo requerido genera ValidationError."""
         data = {
             "smoking_status": "smoker",
-            # Faltan: sedentary_lifestyle, blood_pressure, ldl_cholesterol, recg, height, weight
+            # Faltan: sedentary_lifestyle, blood_pressure, ldl_cholesterol, max_hr, rest_ecg, height, weight
         }
         with pytest.raises(ValidationError):
             MedicalHistoryCreate(**data)
@@ -271,7 +269,8 @@ class TestMedicalHistoryCreateSchema:
             "sedentary_lifestyle": "not_a_bool",  # debería ser bool
             "blood_pressure": "high",  # debería ser int
             "ldl_cholesterol": 100,
-            "recg": "normal",
+            "max_hr": 150.0,
+            "rest_ecg": "normal",
             "height": 175,
             "weight": 70,
         }
@@ -295,19 +294,18 @@ class TestMedicalHistoryReadSchema:
             "sedentary_lifestyle": False,
             "blood_pressure": 110,
             "ldl_cholesterol": 90,
+            "max_hr": 160.0,
             "fasting_blood_sugar": 85,
             "body_mass_index": 21.0,
-            "recg": "normal",
+            "rest_ecg": "normal",
             "height": 170.0,
             "weight": 65.0,
             "body_surface_area": 1.75,
             "created_at": "2023-10-10T00:00:00",
             "description": "Clean bill of health",
-            "diabetes": False,
             "heart_disease": False,
         }
         model = MedicalHistoryRead(**data)
         assert model.id == "uuid-123"
         assert model.age == 30
-        assert model.diabetes is False
         assert model.heart_disease is False

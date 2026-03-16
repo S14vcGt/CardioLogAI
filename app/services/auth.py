@@ -8,6 +8,7 @@ from app.core.security import verify_password
 from app.core.config import SessionDep
 from app.core.logger import get_logger
 from app.services.user import get_by_username
+from app.Scripts.general_helpers import get_vzla_datetime
 
 logger = get_logger(__name__)
 
@@ -16,7 +17,7 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/token")
 
 def create_access_token(data: dict):
     to_encode = data.copy()
-    expire = datetime.utcnow() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    expire = get_vzla_datetime() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     to_encode.update({"exp": expire})
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
     return encoded_jwt

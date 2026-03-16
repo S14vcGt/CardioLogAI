@@ -5,15 +5,16 @@ Usa SQLite en memoria para evitar dependencias externas.
 Sobreescribe la sesión de la app con la sesión de prueba.
 """
 
+import os
 import pytest
 from sqlmodel import SQLModel, create_engine, Session
 from fastapi.testclient import TestClient
 from app.core.config import get_session
 from app.main import app
-import os
-
 from pathlib import Path
 from dotenv import load_dotenv
+
+os.environ["TESTING"] = "1"
 
 env_path = Path(__file__).resolve().parent.parent.parent / ".env"
 load_dotenv(dotenv_path=env_path)

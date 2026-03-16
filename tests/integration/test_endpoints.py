@@ -154,14 +154,14 @@ class TestMedicalHistories:
             "sedentary_lifestyle": False,
             "blood_pressure": 120,
             "ldl_cholesterol": 100,
+            "max_hr": 150.0,
             "fasting_blood_sugar": 90,
             "body_mass_index": 22.0,
-            "recg": "normal",
+            "rest_ecg": "normal",
             "height": 170,
             "weight": 65,
             "body_surface_area": 1.75,
             "description": "Control de rutina",
-            "diabetes": False,
             "heart_disease": False,
         }
 
@@ -195,14 +195,14 @@ class TestMedicalHistories:
             "sedentary_lifestyle": False,
             "blood_pressure": 120,
             "ldl_cholesterol": 100,
+            "max_hr": 150.0,
             "fasting_blood_sugar": 90,
             "body_mass_index": 22.0,
-            "recg": "normal",
+            "rest_ecg": "normal",
             "height": 170,
             "weight": 65,
             "body_surface_area": 1.75,
             "description": "Test",
-            "diabetes": False,
             "heart_disease": False,
         }
         res = client.post(

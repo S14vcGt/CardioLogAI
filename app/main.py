@@ -26,7 +26,8 @@ ALLOWED_ORIGINS = [
 async def lifespan(app: FastAPI):
     logger.info("Starting up...")
     setup_db_logger()
-    init_db()
+    if not os.getenv("TESTING"):
+        init_db()
     yield
     logger.info("Shutting down...")
     logger.info("Finished shutting down.")
