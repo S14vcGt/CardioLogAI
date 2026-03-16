@@ -28,6 +28,7 @@ class MedicalHistory(SQLModel, table=True):
     height: float = Field(nullable=True, description="Altura en Centímetros")
     body_surface_area: float = Field(nullable=True, description="Area de superficie corporal")
     heart_disease: bool = Field(description="Diagnostico de enfermedades cardiacas")
+    model_prediction: float = Field(nullable=True, description="Predicción del modelo")
     created_at: datetime = Field(default_factory=get_vzla_datetime)
     description: str = Field(nullable=True, description="Descripción del historial médico")
     patient_id: str = Field(
