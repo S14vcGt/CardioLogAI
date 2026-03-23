@@ -33,7 +33,7 @@ def seed_data():
         id='bbe29c00-8811-4321-9c66-e984d2495261', 
         is_admin=False,
         username='test3',
-        hashed_password=get_password_hash('test3'),
+        hashed_password=get_password_hash('test'),
         full_name= 'testefano testonio',
         email= 'testefano@testonio.com',
         is_active=True

@@ -1,4 +1,5 @@
 from sqlmodel import SQLModel, Field, Relationship
+from sqlalchemy import DateTime
 from typing import Optional, TYPE_CHECKING
 from uuid import uuid4
 from app.Scripts.general_helpers import get_vzla_datetime
@@ -29,7 +30,9 @@ class MedicalHistory(SQLModel, table=True):
     body_surface_area: float = Field(nullable=True, description="Area de superficie corporal")
     heart_disease: bool = Field(description="Diagnostico de enfermedades cardiacas")
     model_prediction: float = Field(nullable=True, description="Predicción del modelo")
-    created_at: datetime = Field(default_factory=get_vzla_datetime)
+    model_accuracy: float = Field(nullable=True, description="Confianza en la predicción del modelo")
+    model_used: str = Field(nullable=True, description="Modelo usado")
+    created_at: datetime = Field(default_factory=get_vzla_datetime, sa_type=DateTime(timezone=True))
     description: str = Field(nullable=True, description="Descripción del historial médico")
     patient_id: str = Field(
         foreign_key="patient.id",
