@@ -4,6 +4,7 @@ from uuid import uuid4
 from sqlalchemy import DateTime
 from app.Scripts.general_helpers import get_vzla_datetime
 from datetime import datetime
+from app.core.const import Sex
 
 if TYPE_CHECKING:
     from app.models.medical_history import MedicalHistory
@@ -15,11 +16,11 @@ class Patient(SQLModel, table=True):
     name: str = Field(description="Nombre del paciente")
     lastname: str = Field(description="Apellido del paciente")
     birth_date: str = Field(description="Fecha de nacimiento del paciente")
-    address: Optional[str] = Field(description="Dirección del paciente")
+    address: Optional[str] = Field(default=None, nullable=True, description="Dirección del paciente")
     cedula: int = Field(index=True, unique=True, description="Cédula del paciente")
-    phone: Optional[str] = Field(description="Número de teléfono del paciente")
-    email: Optional[str] = Field(unique=True, description="Correo electrónico del paciente")   
-    sex: str = Field(description="Sexo del paciente")
+    phone: Optional[str] = Field(default=None, nullable=True, description="Número de teléfono del paciente")
+    email: Optional[str] = Field(default=None, unique=True, nullable=True, description="Correo electrónico del paciente")   
+    sex: Sex = Field(description="Sexo del paciente")
     family_history: bool = Field(description="Si el paciente tiene antecedentes familiares de enfermedades cardiacas")
     personal_history: bool = Field(description="Si el paciente tiene antecedentes personales de enfermedades cardiacas")
     created_at: datetime = Field(default_factory=get_vzla_datetime, sa_type=DateTime(timezone=True))

@@ -3,6 +3,7 @@ from sqlalchemy import DateTime
 from typing import Optional, TYPE_CHECKING
 from uuid import uuid4
 from app.Scripts.general_helpers import get_vzla_datetime
+from app.core.const import ChestPainType, RestEcg, SmokingStatus
 from datetime import datetime
 
 
@@ -17,14 +18,17 @@ class MedicalHistory(SQLModel, table=True):
         description="Identificador único del historial médico",
     )
     age: int = Field(nullable=True, description="Edad del paciente")
-    smoking_status: str = Field(nullable=True, description="Regularidad con la que el paciente fuma")
+    smoking_status: SmokingStatus = Field(nullable=True, description="Regularidad con la que el paciente fuma")
     sedentary_lifestyle: bool = Field(nullable=True, description="Actividad física regular")
-    blood_pressure: float = Field(nullable=True, description="Presión arterial en reposo (en mm Hg)")
+    systolic_blood_pressure: float = Field(nullable=True, description="Presión arterial sistólica en reposo (en mm Hg)")
+    diastolic_blood_pressure: float = Field(nullable=True, description="Presión arterial diastólica en reposo (en mm Hg)")
     ldl_cholesterol: float = Field(nullable=True, description="Colesterol sérico en mg/d")
     max_hr: float = Field(nullable=True, description="Maximo ritmo cardiaco alcanzado")
+    chest_pain_type: ChestPainType = Field(nullable=True, description="Tipo de dolor en el pecho")
+    exang: bool = Field(nullable=True, description="Angina inducida por el ejercicio")
     fasting_blood_sugar: float = Field(nullable=True, description="Azúcar en sangre en ayunas (indicador de diabetes)")
     body_mass_index: float = Field(nullable=True, description="Indice de masa corporal")
-    rest_ecg: str = Field(nullable=True, description="Electrocardiograma en descanso")
+    rest_ecg: RestEcg = Field(nullable=True, description="Electrocardiograma en descanso")
     weight: float = Field(nullable=True, description="Peso en Kilogramos")
     height: float = Field(nullable=True, description="Altura en Centímetros")
     body_surface_area: float = Field(nullable=True, description="Area de superficie corporal")

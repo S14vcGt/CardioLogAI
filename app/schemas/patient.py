@@ -1,18 +1,19 @@
 from typing import Optional
 from pydantic import BaseModel, ConfigDict, field_validator
 from datetime import datetime
-
+from app.core.const import Sex
 
 class PatientCreate(BaseModel):
     name: str
     lastname: str
     birth_date: str
-    address: str
+    address: Optional[str]
     cedula: int
-    phone: str
-    email: str
-    sex: str
+    phone: Optional[str]
+    email: Optional[str]
+    sex: Sex
     family_history: bool
+    personal_history: bool
     doctor_id: Optional[str]
 
     model_config = ConfigDict(from_attributes=True)
@@ -27,7 +28,7 @@ class PatientCreate(BaseModel):
             return v
         except ValueError:
             raise ValueError(
-                "La fecha de naciemiento debe tener el formato dd-mm-aaaa (ej: 1995-12-23)"
+                "La fecha de naciemiento debe tener el formato aaaa-mm-dd (ej: 1995-12-23)"
             )
 
 
@@ -36,10 +37,13 @@ class PatientRead(BaseModel):
     name: str
     lastname: str
     birth_date: str
-    address: str
+    address: Optional[str] = None
     cedula: int
-    phone: str
-    email: str
+    phone: Optional[str] = None
+    email: Optional[str] = None
+    sex: Sex
     family_history: bool
+    personal_history: bool
+    created_at: datetime
 
     model_config = ConfigDict(from_attributes=True)
