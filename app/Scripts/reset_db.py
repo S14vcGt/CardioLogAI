@@ -5,6 +5,7 @@ from app.core.security import get_password_hash
 from app.models import User
 from app.models import MedicalHistory
 from app.models import Patient
+from app.core.const import Sex
 
 fake = Faker('es_ES') # Configurado en español
 
@@ -39,11 +40,95 @@ def seed_data():
         is_active=True
     )
 
+    patient1 = Patient(
+        id='3ad28c40-08ec-451e-81fa-22f3e8b0a9bd',
+        name='Paciente',
+        lastname='Prueba 1',
+        birth_date='1980-05-15',
+        address='Calle Falsa 123',
+        cedula=12345678,
+        phone='+584141234567',
+        email='paciente1@prueba.com',
+        sex=Sex.MALE,
+        family_history=True,
+        personal_history=False,
+        doctor_id=user.id
+    )
+
+    history1 = MedicalHistory(
+        id='a1e2f3g4-5678-90ab-cdef-123456789012',
+        age=45,
+        smoking_status='never',
+        sedentary_lifestyle=False,
+        systolic_blood_pressure=120.0,
+        diastolic_blood_pressure=80.0,
+        ldl_cholesterol=100.0,
+        max_hr=160.0,
+        chest_pain_type='asymptomatic',
+        exercise_induced_angina=False,
+        fasting_blood_sugar=90.0,
+        body_mass_index=24.5,
+        rest_ecg='normal',
+        weight=75.0,
+        height=175.0,
+        body_surface_area=1.9,
+        heart_disease=False,
+        model_prediction=0.15,
+        model_accuracy=0.90,
+        model_used='Random Forest',
+        description='Control de rutina, todo normal. Sin riesgo aparente.',
+        patient_id=patient1.id
+    )
+
+    patient2 = Patient(
+        id='9cf8ea11-66af-4386-8a50-681b9e863118',
+        name='Paciente',
+        lastname='Prueba 2',
+        birth_date='1965-10-20',
+        address='Avenida Principal 456',
+        cedula=87654321,
+        phone='+584129876543',
+        email='paciente2@prueba.com',
+        sex=Sex.FEMALE,
+        family_history=False,
+        personal_history=True,
+        doctor_id=user2.id
+    )
+
+    history2 = MedicalHistory(
+        id='b2c3d4e5-6789-01bc-defg-234567890123',
+        age=60,
+        smoking_status='current',
+        sedentary_lifestyle=True,
+        systolic_blood_pressure=140.0,
+        diastolic_blood_pressure=90.0,
+        ldl_cholesterol=150.0,
+        max_hr=140.0,
+        chest_pain_type='typical_angina',
+        exercise_induced_angina=True,
+        fasting_blood_sugar=110.0,
+        body_mass_index=28.0,
+        rest_ecg='st_abnormality',
+        weight=85.0,
+        height=165.0,
+        body_surface_area=2.0,
+        heart_disease=True,
+        model_prediction=0.85,
+        model_accuracy=0.88,
+        model_used='XGBoost',
+        description='Paciente con riesgo cardiovascular elevado, requiere seguimiento.',
+        patient_id=patient2.id
+    )
+
     # 2. Abrimos una sesión para interactuar con la BD
     with Session(engine) as session:
         # Añadimos los objetos a la sesión (todavía no están en la BD)
         session.add(user)
         session.add(user2)
+        session.add(patient1)
+        session.add(history1)
+        session.add(patient2)
+        session.add(history2)
         
         # 3. Confirmamos los cambios (aquí se guardan en PostgreSQL)
         session.commit()
