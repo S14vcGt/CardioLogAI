@@ -1,11 +1,13 @@
 from typing import Optional
 from pydantic import BaseModel, ConfigDict
-from app.core.const import ChestPainType, RestEcg, SmokingStatus
+from app.core.const import ChestPainType, RestEcg, SmokingStatus, Sex
 from datetime import datetime
 
 
 class MedicalHistoryCreate(BaseModel):
+    id: str  # generado en el frontend
     age: int
+    sex: Sex
     smoking_status: Optional[SmokingStatus] = None
     sedentary_lifestyle: Optional[bool] = None
     systolic_blood_pressure: Optional[float] = None
@@ -46,5 +48,8 @@ class MedicalHistoryRead(BaseModel):
     created_at: datetime
     description: Optional[str]
     heart_disease: bool
+    model_prediction: Optional[float]
+    model_accuracy: Optional[float]
+    model_used: Optional[str]
 
     model_config = ConfigDict(from_attributes=True)

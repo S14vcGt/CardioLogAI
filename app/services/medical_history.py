@@ -28,8 +28,10 @@ def create_medical_history(
         history_dict = history.model_dump()
         history_dict["patient_id"] = patient_id
         history_dict["age"] = calcular_edad(patient.birth_date)  # yyyy-mm-dd
-        # ?por ahora se calculara en el front el bsa
-        # history_dict["body_surface_area"] = calcular_bsa_mosteller(history.weight, history.height)
+
+        # sex es solo para el modelo, no es columna de MedicalHistory
+        history_dict.pop("sex", None)
+
         db_history = MedicalHistory(**history_dict)
 
         session.add(db_history)

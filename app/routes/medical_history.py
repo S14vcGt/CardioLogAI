@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Request
 from app.schemas.medical_history import MedicalHistoryCreate, MedicalHistoryRead
 from app.models.medical_history import MedicalHistory
 from app.models.patient import Patient
@@ -24,12 +24,13 @@ router = APIRouter(
 @router.post("/", response_model=MedicalHistoryRead)
 def create_mh(
     patient_id: str,
-    history: MedicalHistoryCreate,
+    data: MedicalHistoryCreate,
     session: SessionDep,
     current_user: User = Depends(get_current_user),
 ):
+    """Guarda la historia médica en la base de datos."""
     try:
-        result = create_medical_history(session, patient_id, history, current_user)
+        result = create_medical_history(session, patient_id, data, current_user)
         return result
     except HTTPException as e:
         raise e
