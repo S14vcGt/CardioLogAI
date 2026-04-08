@@ -1,6 +1,6 @@
 from sqlmodel import SQLModel, Field, Relationship
 from sqlalchemy import DateTime
-from typing import Optional, TYPE_CHECKING
+from typing import Optional, List, TYPE_CHECKING
 from uuid import uuid4
 from app.Scripts.general_helpers import get_vzla_datetime
 from app.core.const import ChestPainType, RestEcg, SmokingStatus
@@ -9,6 +9,7 @@ from datetime import datetime
 
 if TYPE_CHECKING:
     from app.models.patient import Patient
+    from app.models.medication import MedicalHistoryMedication
 
 
 class MedicalHistory(SQLModel, table=True):
@@ -43,3 +44,4 @@ class MedicalHistory(SQLModel, table=True):
         description="Identificador del paciente al que pertenece el historial médico",
     )
     patient: Optional["Patient"] = Relationship(back_populates="medical_histories")
+    medication_links: List["MedicalHistoryMedication"] = Relationship(back_populates="medical_history")

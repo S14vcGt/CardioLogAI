@@ -1,6 +1,7 @@
-from typing import Optional
+from typing import Optional, List
 from pydantic import BaseModel, ConfigDict
 from app.core.const import ChestPainType, RestEcg, SmokingStatus, Sex
+from app.schemas.medication import MedicationEntryCreate, MedicationEntryRead
 from datetime import datetime
 
 
@@ -19,14 +20,15 @@ class MedicalHistoryCreate(BaseModel):
     exang: Optional[bool] = None
     body_mass_index: Optional[float] = None
     rest_ecg: Optional[RestEcg] = None
-    height: Optional[float]
-    weight: Optional[float]
-    body_surface_area: Optional[float]
-    description: Optional[str]
+    height: Optional[float] = None
+    weight: Optional[float] = None
+    body_surface_area: Optional[float] = None
+    description: Optional[str] = None
     heart_disease: bool
     model_prediction: Optional[float] = None
     model_confidence: Optional[float] = None
     model_used: Optional[str] = None
+    medications: List[MedicationEntryCreate] = []
 
     model_config = ConfigDict(from_attributes=True)
 
@@ -34,25 +36,26 @@ class MedicalHistoryCreate(BaseModel):
 class MedicalHistoryRead(BaseModel):
     id: str
     age: int
-    smoking_status: Optional[str]
-    sedentary_lifestyle: Optional[bool]
-    systolic_blood_pressure: Optional[float]
-    diastolic_blood_pressure: Optional[float]
-    ldl_cholesterol: Optional[float]
-    max_hr: Optional[float]
-    chest_pain_type: Optional[ChestPainType]
-    exang: Optional[bool]
-    fasting_blood_sugar: Optional[float]
-    body_mass_index: Optional[float]
-    rest_ecg: Optional[RestEcg]
-    height: Optional[float]
-    weight: Optional[float]
-    body_surface_area: Optional[float]
+    smoking_status: Optional[str] = None
+    sedentary_lifestyle: Optional[bool] = None
+    systolic_blood_pressure: Optional[float] = None
+    diastolic_blood_pressure: Optional[float] = None
+    ldl_cholesterol: Optional[float] = None
+    max_hr: Optional[float] = None
+    chest_pain_type: Optional[ChestPainType] = None
+    exang: Optional[bool] = None
+    fasting_blood_sugar: Optional[float] = None
+    body_mass_index: Optional[float] = None
+    rest_ecg: Optional[RestEcg] = None
+    height: Optional[float] = None
+    weight: Optional[float] = None
+    body_surface_area: Optional[float] = None
     created_at: datetime
-    description: Optional[str]
+    description: Optional[str] = None
     heart_disease: bool
-    model_prediction: Optional[float]
-    model_confidence: Optional[float]
-    model_used: Optional[str]
+    model_prediction: Optional[float] = None
+    model_confidence: Optional[float] = None
+    model_used: Optional[str] = None
+    medications: List[MedicationEntryRead] = []
 
     model_config = ConfigDict(from_attributes=True)
