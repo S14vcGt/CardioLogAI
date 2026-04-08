@@ -5,6 +5,7 @@ from app.models.patient import Patient
 from app.models.user import User
 from app.core.config import SessionDep
 from app.core.logger import get_logger
+from app.services.model.predict import predict_heart_disease
 from app.services.auth import get_current_user
 from typing import List
 from app.services.medical_history import (
@@ -22,14 +23,20 @@ router = APIRouter(
 
 
 @router.post("/", response_model=MedicalHistoryRead)
-def create_mh(
+def create_mh_with_prediction(
     patient_id: str,
     data: MedicalHistoryCreate,
     session: SessionDep,
+    request: Request,
     current_user: User = Depends(get_current_user),
 ):
     """Guarda la historia médica en la base de datos."""
     try:
+        prediction = predict_heart_disease(data, request.state.model)
+        data.model_prediction = prediction["prediction"]
+        data.model_confidence = prediction["confidence"]
+        data.model_used = None
+
         result = create_medical_history(session, patient_id, data, current_user)
         return result
     except HTTPException as e:

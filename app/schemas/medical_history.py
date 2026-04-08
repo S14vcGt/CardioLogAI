@@ -24,6 +24,9 @@ class MedicalHistoryCreate(BaseModel):
     body_surface_area: Optional[float]
     description: Optional[str]
     heart_disease: bool
+    model_prediction: Optional[float] = None
+    model_confidence: Optional[float] = None
+    model_used: Optional[str] = None
 
     model_config = ConfigDict(from_attributes=True)
 
@@ -49,7 +52,7 @@ class MedicalHistoryRead(BaseModel):
     description: Optional[str]
     heart_disease: bool
     model_prediction: Optional[float]
-    model_accuracy: Optional[float]
+    model_confidence: Optional[float]
     model_used: Optional[str]
 
     model_config = ConfigDict(from_attributes=True)

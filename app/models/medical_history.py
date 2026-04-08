@@ -34,7 +34,7 @@ class MedicalHistory(SQLModel, table=True):
     body_surface_area: float = Field(nullable=True, description="Area de superficie corporal")
     heart_disease: bool = Field(description="Diagnostico de enfermedades cardiacas")
     model_prediction: float = Field(nullable=True, description="Predicción del modelo")
-    model_accuracy: float = Field(nullable=True, description="Confianza en la predicción del modelo")
+    model_confidence: float = Field(nullable=True, description="Confianza en la predicción del modelo")
     model_used: str = Field(nullable=True, description="Modelo usado")
     created_at: datetime = Field(default_factory=get_vzla_datetime, sa_type=DateTime(timezone=True))
     description: str = Field(nullable=True, description="Descripción del historial médico")

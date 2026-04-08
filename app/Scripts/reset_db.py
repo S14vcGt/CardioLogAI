@@ -5,7 +5,7 @@ from app.core.security import get_password_hash
 from app.models import User
 from app.models import MedicalHistory
 from app.models import Patient
-from app.core.const import Sex
+from app.core.const import Sex, ChestPainType, RestEcg, SmokingStatus
 
 fake = Faker('es_ES') # Configurado en español
 
@@ -58,23 +58,23 @@ def seed_data():
     history1 = MedicalHistory(
         id='a1e2f3g4-5678-90ab-cdef-123456789012',
         age=45,
-        smoking_status='never',
+        smoking_status=SmokingStatus.NEVER,
         sedentary_lifestyle=False,
         systolic_blood_pressure=120.0,
         diastolic_blood_pressure=80.0,
         ldl_cholesterol=100.0,
         max_hr=160.0,
-        chest_pain_type='asymptomatic',
-        exercise_induced_angina=False,
+        chest_pain_type=ChestPainType.ASYMPTOMATIC,
+        exang=False,
         fasting_blood_sugar=90.0,
         body_mass_index=24.5,
-        rest_ecg='normal',
+        rest_ecg=RestEcg.NORMAL,
         weight=75.0,
         height=175.0,
         body_surface_area=1.9,
         heart_disease=False,
         model_prediction=0.15,
-        model_accuracy=0.90,
+        model_confidence=0.90,
         model_used='Random Forest',
         description='Control de rutina, todo normal. Sin riesgo aparente.',
         patient_id=patient1.id
@@ -98,23 +98,23 @@ def seed_data():
     history2 = MedicalHistory(
         id='b2c3d4e5-6789-01bc-defg-234567890123',
         age=60,
-        smoking_status='current',
+        smoking_status=SmokingStatus.CURRENT,
         sedentary_lifestyle=True,
         systolic_blood_pressure=140.0,
         diastolic_blood_pressure=90.0,
         ldl_cholesterol=150.0,
         max_hr=140.0,
-        chest_pain_type='typical_angina',
-        exercise_induced_angina=True,
+        chest_pain_type=ChestPainType.TYPICAL_ANGINA,
+        exang=True,
         fasting_blood_sugar=110.0,
         body_mass_index=28.0,
-        rest_ecg='st_abnormality',
+        rest_ecg=RestEcg.ST_ABNORMALITY,
         weight=85.0,
         height=165.0,
         body_surface_area=2.0,
         heart_disease=True,
         model_prediction=0.85,
-        model_accuracy=0.88,
+        model_confidence=0.88,
         model_used='XGBoost',
         description='Paciente con riesgo cardiovascular elevado, requiere seguimiento.',
         patient_id=patient2.id
