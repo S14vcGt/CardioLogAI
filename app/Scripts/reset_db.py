@@ -5,6 +5,7 @@ from app.core.security import get_password_hash
 from app.models import User
 from app.models import MedicalHistory
 from app.models import Patient
+from app.models import Medication, MedicalHistoryMedication
 from app.core.const import Sex, ChestPainType, RestEcg, SmokingStatus
 
 fake = Faker('es_ES') # Configurado en español
@@ -120,6 +121,34 @@ def seed_data():
         patient_id=patient2.id
     )
 
+    med1 = Medication(
+        id='c1d2e3f4-g5h6-7890-abcd-ef1234567890',
+        name='Losartán',
+        rxcui='2473'
+    )
+
+    med2 = Medication(
+        id='d2e3f4g5-h6i7-8901-bcde-f12345678901',
+        name='Atorvastatina',
+        rxcui='83367'
+    )
+
+    history_med1 = MedicalHistoryMedication(
+        medical_history_id=history2.id,
+        medication_id=med1.id,
+        dose='50',
+        unit='mg',
+        frequency='Cada 24 horas'
+    )
+
+    history_med2 = MedicalHistoryMedication(
+        medical_history_id=history2.id,
+        medication_id=med2.id,
+        dose='20',
+        unit='mg',
+        frequency='En la noche'
+    )
+
     # 2. Abrimos una sesión para interactuar con la BD
     with Session(engine) as session:
         # Añadimos los objetos a la sesión (todavía no están en la BD)
@@ -129,6 +158,10 @@ def seed_data():
         session.add(history1)
         session.add(patient2)
         session.add(history2)
+        session.add(med1)
+        session.add(med2)
+        session.add(history_med1)
+        session.add(history_med2)
         
         # 3. Confirmamos los cambios (aquí se guardan en PostgreSQL)
         session.commit()
