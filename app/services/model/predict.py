@@ -1,6 +1,4 @@
 from fastapi import HTTPException
-from sklearn.preprocessing import OneHotEncoder, StandardScaler
-from sklearn.compose import ColumnTransformer
 from app.schemas.medical_history import MedicalHistoryCreate
 from app.core.logger import get_logger
 from app.core.const import mean, mode
