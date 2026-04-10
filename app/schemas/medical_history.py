@@ -7,8 +7,8 @@ from datetime import datetime
 
 class MedicalHistoryCreate(BaseModel):
     id: str  # generado en el frontend
-    age: int
-    sex: Sex
+    age: Optional[int] = 0  # calculado en el backend a partir de birth_date
+    sex: Optional[Sex] = None  # tomado del paciente en el backend
     smoking_status: Optional[SmokingStatus] = None
     sedentary_lifestyle: Optional[bool] = None
     systolic_blood_pressure: Optional[float] = None
@@ -30,7 +30,7 @@ class MedicalHistoryCreate(BaseModel):
     model_used: Optional[str] = None
     medications: List[MedicationEntryCreate] = []
 
-    model_config = ConfigDict(from_attributes=True)
+    model_config = ConfigDict(from_attributes=True, use_enum_values=True)
 
 
 class MedicalHistoryRead(BaseModel):
@@ -58,4 +58,4 @@ class MedicalHistoryRead(BaseModel):
     model_used: Optional[str] = None
     medications: List[MedicationEntryRead] = []
 
-    model_config = ConfigDict(from_attributes=True)
+    model_config = ConfigDict(from_attributes=True, use_enum_values=True)

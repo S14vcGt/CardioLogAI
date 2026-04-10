@@ -32,7 +32,7 @@ def create_mh_with_prediction(
 ):
     """Guarda la historia médica en la base de datos."""
     try:
-        prediction = predict_heart_disease(data, request.state.model)
+        prediction = predict_heart_disease(data, request.state.model, request.state.preprocessor)
         data.model_prediction = prediction["prediction"]
         data.model_confidence = prediction["confidence"]
         data.model_used = None

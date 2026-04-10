@@ -15,14 +15,14 @@ class RestEcg(str, Enum):
 
 
 class SmokingStatus(str, Enum):
-    NEVER = "nunca"
-    FORMER = "ex-fumador"
-    CURRENT = "fumador"
+    NEVER = "never"
+    FORMER = "former"
+    CURRENT = "current"
 
 
 class Sex(str, Enum):
-    MALE = "Masculino"
-    FEMALE = "Femenino"
+    MALE = "male"
+    FEMALE = "female"
 
 mean= {
     'age': 52.89,

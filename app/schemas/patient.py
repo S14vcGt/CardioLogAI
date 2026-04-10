@@ -16,7 +16,7 @@ class PatientCreate(BaseModel):
     personal_history: bool
     doctor_id: Optional[str]
 
-    model_config = ConfigDict(from_attributes=True)
+    model_config = ConfigDict(from_attributes=True, use_enum_values=True)
 
     @field_validator("birth_date")
     @classmethod
@@ -46,4 +46,4 @@ class PatientRead(BaseModel):
     personal_history: bool
     created_at: datetime
 
-    model_config = ConfigDict(from_attributes=True)
+    model_config = ConfigDict(from_attributes=True, use_enum_values=True)

@@ -33,8 +33,11 @@ async def lifespan(app: FastAPI):
     if not os.getenv("TESTING"):
         init_db()
         model = joblib.load("./app/services/model/heart_disease_pipeline_v1.pkl")
+        logger.info("Modelo cargado exitosamente.")
+        preprocessor = joblib.load('./app/services/model/preprocessor.joblib')
+        logger.info("Preprocessor cargado exitosamente.")
 
-    yield {"model": model}
+    yield {"model": model, "preprocessor": preprocessor}
 
     logger.info("Shutting down...")
 

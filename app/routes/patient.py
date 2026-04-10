@@ -41,3 +41,20 @@ def get_patients(session: SessionDep, current_user: User = Depends(get_current_u
     except Exception as e:
         logger.exception(f"Error en GET /patients/: {e}")
         raise HTTPException(status_code=500, detail="Error interno del servidor")
+
+
+@router.get("/{patient_id}", response_model=PatientRead)
+def get_patient(
+    patient_id: str, session: SessionDep, current_user: User = Depends(get_current_user)
+):
+    try:
+        patient = get_by_id(session, patient_id)
+        if not patient or patient.doctor_id != current_user.id:
+            raise HTTPException(status_code=404, detail="Paciente no encontrado")
+        return patient
+    except HTTPException as e:
+        raise e
+    except Exception as e:
+        logger.exception(f"Error en GET /patients/{patient_id}: {e}")
+        raise HTTPException(status_code=500, detail="Error interno del servidor")
+

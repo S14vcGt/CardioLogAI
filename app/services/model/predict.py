@@ -28,11 +28,11 @@ categorical_cols = ['chest_pain_type', 'rest_ecg']
 numeric_cols = ['age', 'systolic_blood_pressure', 'ldl_cholesterol', 'max_hr']
 
 
-def predict_heart_disease(data: MedicalHistoryCreate, model) -> dict:
+def predict_heart_disease(data: MedicalHistoryCreate, model, preprocessor) -> dict:
     """Pipeline completa: formatear datos → imputar → predecir."""
     try:
         input_df = format_data(data)
-        prep_df = preprocessing(input_df)
+        prep_df = preprocessing(input_df, preprocessor)
         result = model_predict(prep_df, model)
 
         return result
@@ -97,19 +97,16 @@ def categorical_imputer(df: pd.DataFrame) -> pd.DataFrame:
         )
 
 
-def preprocessing(df: pd.DataFrame) -> pd.DataFrame:
+def preprocessing(df: pd.DataFrame, preprocessor) -> pd.DataFrame:
     """Aplica imputación numérica y categórica al DataFrame."""
     try:
+
         df = numerical_imputer(df)
         df = categorical_imputer(df)
-        
-        preprocessor = ColumnTransformer(
-            transformers=[
-                ('num', StandardScaler(), numeric_cols),
-                ('cat', OneHotEncoder(handle_unknown='ignore'), categorical_cols)
-            ])
 
-        X = preprocessor.fit_transform(df)
+        logger.info(f"Datos antes de ser preprocesados:\n{df.to_string()}")
+        X = preprocessor.transform(df)
+        logger.info(f"Datos después de ser preprocesados:\n{X}")
         return X
     except HTTPException:
         raise
