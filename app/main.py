@@ -43,6 +43,8 @@ async def lifespan(app: FastAPI):
 
     logger.info("Liberando modelo de la memoria...")
     model = None
+    logger.info("Liberando preprocessor de la memoria...")
+    preprocessor = None
 
     logger.info("Finished shutting down.")
 

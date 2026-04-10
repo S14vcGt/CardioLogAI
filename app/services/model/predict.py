@@ -117,7 +117,7 @@ def model_predict(input_df: pd.DataFrame, model) -> dict:
     """Ejecuta la predicción y devuelve resultado con confianza."""
     try:
         prediction = model.predict(input_df)[0]
-        probability = model.predict_proba(input_df)[0][1]
+        probability = model.predict_proba(input_df)[0][int(prediction)]
 
         return {
             "prediction": int(prediction),
